@@ -1,8 +1,8 @@
-##Security-custom-annotations-spring-boot-starter
+## Security-custom-annotations-spring-boot-starter
 This project is a spring boot starter, which enable to use custom annotation to secure method based on spring security 5.7.1.
 To use it we have to configure a few things:
 
-###1.Create own custom annotation for example: 
+### 1.Create own custom annotation for example: 
 ```
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(value = RetentionPolicy.RUNTIME)
@@ -52,7 +52,7 @@ If this method is not added to annotation, default behaviour is BOTH.<br/>
 This method returning type have to be String or Order enum, which has values like this: PRE, POST, BOTH.<br/>
 It is possible to use prepared enum: pl.bihuniak.piotr.autoconfigure.api.Order
 
-###2.Implement pl.bihuniak.piotr.autoconfigure.api.AuthorizationRuleProvider
+### 2.Implement pl.bihuniak.piotr.autoconfigure.api.AuthorizationRuleProvider
 ```
 public interface AuthorizationRuleProvider<T extends Annotation> {
 	MainRule<T> mainRule();
@@ -135,7 +135,7 @@ new Rule<>(Id.class,
 	}
 )
 ```
-###3.Create UserProvider
+### 3.Create UserProvider
 Last thing to do is modifying org.springframework.security.core.Authentication.getPrincipal()
 method in order that return custom object. For each type of authorizations it has to be done in different way.
 All needed information can be found in spring security documentation, in this documentation it will be shown for oAuth2 and basicAuth.</br>
@@ -236,7 +236,7 @@ http
     .userInfoEndpoint().userService(new ExampleOAuth2UserService())
 ```
 
-####To see example: 
+#### To see example: 
 https://github.com/bihu1/security-custom-annotations-spring-boot-example.
 
 
