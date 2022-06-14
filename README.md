@@ -45,7 +45,7 @@ To skip running tests from this project:
 	</build>
 ```
 
-###2.Create own custom annotation 
+### 2.Create own custom annotation 
 For example:
 ```
 @Target({ElementType.METHOD, ElementType.TYPE})
