@@ -2,7 +2,51 @@
 This project is a spring boot starter, which enable to use custom annotation to secure method based on spring security 5.7.1.
 To use it we have to configure a few things:
 
-###1.Create own custom annotation for example: 
+###1.Add this project to pom.xml or build.gradle:
+It can be done by solution providing by 
+https://jitpack.io/ </br>
+In maven it can be done in this way:
+```
+	<repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+	<dependencies>
+		<dependency>
+			<groupId>com.github.bihu1</groupId>
+			<artifactId>security-custom-annotations-spring-boot-starter</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+```
+Jitpack build this project on local machine, so spring-boot-starter-test dependency is needed for compile tests properly.
+To skip running tests from this project:
+```
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M1</version>
+				<configuration>
+					<excludes>
+						<exclude>**/SecurityCustomAnnotationsSpringBootExampleApplicationTests.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+```
+
+###2.Create own custom annotation 
+For example:
 ```
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(value = RetentionPolicy.RUNTIME)
@@ -52,7 +96,7 @@ If this method is not added to annotation, default behaviour is BOTH.<br/>
 This method returning type have to be String or Order enum, which has values like this: PRE, POST, BOTH.<br/>
 It is possible to use prepared enum: pl.bihuniak.piotr.autoconfigure.api.Order
 
-###2.Implement pl.bihuniak.piotr.autoconfigure.api.AuthorizationRuleProvider
+###3.Implement pl.bihuniak.piotr.autoconfigure.api.AuthorizationRuleProvider
 ```
 public interface AuthorizationRuleProvider<T extends Annotation> {
 	MainRule<T> mainRule();
@@ -123,7 +167,7 @@ Post- on the returning type.</br>
 So rule have to be unique for each type, using for security.
 Based on the previous examples, next one, for this method:
 ```
-@MyProjectAuthorize(ids="arg1", order="PRE")
+@MyProjectAuthorize(ids="id", order="PRE")
 public void doSomething(Id id)
 ```
 This rule will be invoked:
@@ -135,8 +179,8 @@ new Rule<>(Id.class,
 	}
 )
 ```
-###3.Create UserProvider
-Last thing to do is modifying org.springframework.security.core.Authentication.getPrincipal()
+###4.Create UserProvider
+Last step to take is modifying org.springframework.security.core.Authentication.getPrincipal()
 method in order that return custom object. For each type of authorizations it has to be done in different way.
 All needed information can be found in spring security documentation, in this documentation it will be shown for oAuth2 and basicAuth.</br>
 First it is needed to create own interface, which will be user provider. For example:
